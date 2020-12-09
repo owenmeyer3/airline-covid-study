@@ -34,13 +34,14 @@ for i, name in enumerate(airDataFileNames):
 
     # Rename date column
     tempAirDF = tempAirDF.rename(columns={"FL_DATE":"date", "OP_UNIQUE_CARRIER":"carrier", "CANCELLED":"cancelled"})
+
     # If this is the first dataset, create all-date dataframe
     if i == 0:
         airDF = tempAirDF
     # Else, append to all-date dataframe
     else:
         airDF.append(tempAirDF)
-print(airDF.head(10))
+
 #--------------COVID-------------------
 covidDataPath =  'datasets/covid-19/covid_us_county.csv'
 covid_df = pd.read_csv(covidDataPath)
@@ -49,6 +50,13 @@ covid_df = pd.read_csv(covidDataPath)
 covid_df = covid_df.groupby(['date'])[['cases']].sum()
 
 #--------------Join on date------------
+# Combine the data into a single dataset
+study_data_complete = pd.merge(airDF, covid_df, how="left", on=["date", "date"])
+# fill NaN cases with 0
+study_data_complete['cases'] = study_data_complete['cases'].fillna(0)
 
+#Average delay time per airline on each day
+study_data_complete = study_data_complete.groupby(["date", "carrier"]).agg({"cancelled":["mean"],"total_delay":["mean"], "cases":["mean"]}).reset_index()
+print(study_data_complete.head(20))
 
 #--------------Plot date vs [total case, all airline delay, AA delay, DL delay, WN delay, UA delay, nk delay, f9 dealy]-------
