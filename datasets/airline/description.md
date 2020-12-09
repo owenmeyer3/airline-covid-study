@@ -13,3 +13,5 @@
 * NASDelay	National Air System Delay, in Minutes	
 * SecurityDelay	Security Delay, in Minutes
 * LateAircraftDelay	Late Aircraft Delay, in Minutes
+
+# Note city flying in/out

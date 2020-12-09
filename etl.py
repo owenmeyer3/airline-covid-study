@@ -1,6 +1,6 @@
 import pandas as pd
 from os import listdir
-
+#--------------AIRLINE-------------------
 ###get list of airline data csv files
 airlineDataPath = 'datasets/airline/data/'
 try:
@@ -25,3 +25,12 @@ for i, name in enumerate(airDataFileNames):
     # Else, append to all-date dataframe
     else:
         airDF.append(tempAirDF)
+
+
+#--------------COVID-------------------
+
+
+#--------------Join on date------------
+
+
+#--------------Plot date vs [total case, all airline delay, AA delay, DL delay, WN delay, UA delay, nk delay, f9 dealy]-------
