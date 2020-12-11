@@ -20,3 +20,12 @@ In our next step, we cleaned our dataframe by limiting the data to the timeframe
 In summary, we looped through all of the monthly CSVs dropping all of the carriers that were not in our list and dropping all other besides the columns that we were required for our study.
 
 Within each month CSV, after it dropped all unnesscary columns and carriers. it was appended into a "master" dataframe.
+
+
+#Observations
+
+We used Kaggle to pull both our COVID and Airline Data – there were quite a few columns of airline data that we didn’t find relevant (Weather Delays/Cancellations, departure/arrival airports)
+
+Would be interesting to make note of destination and departure airports to see if some states are affected more than others. The view of COVID has become heavily politicized, and we thought it would be interesting, for future, to see if there’s any major difference in delay data by red or blue state. 
+
+We saw that there were a lot more cancellations than there were delays. This is kind of an interesting observation as it seems to suggest that these airlines all have a process in place for loading their planes in a timely manner, even while COVID is surging.
