@@ -178,12 +178,12 @@ createString = '''
 #conn.execute(createString)
 
 #table_name = 'airlines_covid'
-study_data_complete.to_sql(
-    table_name,
-    engine,
-    if_exists='replace',
-    index=False,
-    chunksize=500, 
-)
+#study_data_complete.to_sql(
+  #  table_name,
+   # engine,
+   # if_exists='replace',
+   # index=False,
+   # chunksize=500, 
+#)
  
 
