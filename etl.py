@@ -3,11 +3,11 @@ from os import listdir
 import matplotlib.pyplot as plt
 from datetime import datetime
 from sqlalchemy import create_engine
-import psycopg2
-#--------------AIRLINE-------------------
+
+#--------------AIRLINE DATA ET-------------------
 airlineDataPath = 'datasets/airline/data/'
 
-#Select-airlines = American:AA Delta:DL Southwest:WN United:UA Spirit:NK Frontier: F9
+# Select-airlines = American:AA Delta:DL Southwest:WN United:UA Spirit:NK Frontier: F9
 carrierList = ['AA','DL','WN','UA','NK','F9']
 
 try:
@@ -78,7 +78,7 @@ for name in airDataFileNames:
     # Set not first month for second iteration of months
     isFirstMonth = False
 
-#--------------COVID-------------------
+#--------------COVID DATA------------------------
 # Get covid date
 covidDataPath =  'datasets/covid-19/covid_us_county.csv'
 covid_df = pd.read_csv(covidDataPath)
@@ -88,7 +88,7 @@ covid_df = covid_df.groupby(['date'])[['cases']].sum().reset_index()
 covid_df = covid_df.astype({'date':'string'})
 
 
-#--------------Join on date------------
+#--------------JOIN AIRLINE AND COVID DATA--------
 # Combine the data into a single dataset
 study_data_complete = modAirDF.merge(covid_df, how="left", on=["date", "date"])
 
@@ -97,7 +97,7 @@ study_data_complete['cases'] = study_data_complete['cases'].fillna(0)
 
 print(study_data_complete)
 
-#--------------Plot date vs [total cases, flight cancellations per airline], [total cases, flight delays per airline]-------
+#--------------PLOT AIRLINE AND COVID DATA--------
 #define dates series as datetime objects
 dates = pd.to_datetime(study_data_complete['date'], format='%Y-%m-%d')
 
@@ -147,17 +147,25 @@ ax3.legend(loc='upper left')
 ax4.legend(loc='upper center')
 plt.show()
 
-#create engine
-engine = create_engine('postgres://postgres:Flyingtwig5412@localhost:5432/Airline_Covid_Study')
+#create engine and connect
+try:
+    # if database exits
+    print('db exists')
+    engine = create_engine('postgres://postgres:Bigomy03@localhost:5432/airline_covid_db')
+except:
+    print('db doesnt exist, create db')
+    engine = create_engine('postgres://postgres:Bigomy03@localhost:5432/postgres')
+    conn = engine.connect()
+    conn.execute('commit')
+    conn.execute("create database airline_covid_db")
+    conn.close()
+    engine = create_engine('postgres://postgres:Bigomy03@localhost:5432/airline_covid_db')
 conn = engine.connect()
 
-#rename df
-test = engine.table_names() 
-Airline_Covid_Study = study_data_complete
-
-#create string for SQL table
+# Create table string in SQL language (delete current table if it exists)
 createString = '''
-	CREATE TABLE airlines_covid (
+    DROP TABLE IF EXISTS airline_covid;
+	CREATE TABLE airline_covid (
 	date VARCHAR(20),
 	cancelled_rate_AA FLOAT(23),
 	total_delay_AA FLOAT(23),
@@ -171,19 +179,23 @@ createString = '''
 	total_delay_NK FLOAT(23),
 	cancelled_rate_F9 FLOAT(23),
 	total_delay_F9 FLOAT(23),
-	cases int)
+	cases INT);
 '''
 
+createString = 'DROP TABLE IF EXISTS airlines_covid'
+# Create table in db
+conn.execute(createString)
 
-#conn.execute(createString)
+# Upload airline/covid data to postgres with SqlAlchemy ORM language
+table_name = 'airline_covid'
+study_data_complete.to_sql(
+   table_name,
+   engine,
+   if_exists='replace',
+   index=False,
+   chunksize=500, 
+)
 
-#table_name = 'airlines_covid'
-#study_data_complete.to_sql(
-  #  table_name,
-   # engine,
-   # if_exists='replace',
-   # index=False,
-   # chunksize=500, 
-#)
+conn.close()
  
 
