@@ -2,6 +2,8 @@ import pandas as pd
 from os import listdir
 import matplotlib.pyplot as plt
 from datetime import datetime
+from sqlalchemy import create_engine
+import psycopg2
 #--------------AIRLINE-------------------
 airlineDataPath = 'datasets/airline/data/'
 
@@ -145,4 +147,43 @@ ax3.legend(loc='upper left')
 ax4.legend(loc='upper center')
 plt.show()
 
+#create engine
+engine = create_engine('postgres://postgres:Flyingtwig5412@localhost:5432/Airline_Covid_Study')
+conn = engine.connect()
+
+#rename df
+test = engine.table_names() 
+Airline_Covid_Study = study_data_complete
+
+#create string for SQL table
+createString = '''
+	CREATE TABLE airlines_covid (
+	date VARCHAR(20),
+	cancelled_rate_AA FLOAT(23),
+	total_delay_AA FLOAT(23),
+	cancelled_rate_DL FLOAT(23),
+	total_delay_DL FLOAT(23),
+	cancelled_rate_WN FLOAT(23),
+	total_delay_WN FLOAT(23),
+	cancelled_rate_UA FLOAT(23),
+	total_delay_UA FLOAT(23),
+	cancelled_rate_NK FLOAT(23),
+	total_delay_NK FLOAT(23),
+	cancelled_rate_F9 FLOAT(23),
+	total_delay_F9 FLOAT(23),
+	cases int)
+'''
+
+
+#conn.execute(createString)
+
+#table_name = 'airlines_covid'
+study_data_complete.to_sql(
+    table_name,
+    engine,
+    if_exists='replace',
+    index=False,
+    chunksize=500, 
+)
+ 
 
