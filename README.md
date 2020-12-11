@@ -21,10 +21,11 @@ In summary, we looped through all of the monthly CSVs dropping all of the carrie
 
 Within each month CSV, after it dropped all unnesscary columns and carriers. it was appended into a "master" dataframe.
 
+#Load
+
+We decided to use pgAdmin to hold all of our data.
 
 #Observations
-
-We used Kaggle to pull both our COVID and Airline Data – there were quite a few columns of airline data that we didn’t find relevant (Weather Delays/Cancellations, departure/arrival airports)
 
 Would be interesting to make note of destination and departure airports to see if some states are affected more than others. The view of COVID has become heavily politicized, and we thought it would be interesting, for future, to see if there’s any major difference in delay data by red or blue state. 
 
