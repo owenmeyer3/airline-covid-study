@@ -23,7 +23,7 @@ Within each month CSV, after it dropped all unnesscary columns and carriers. it 
 
 #Load
 
-We decided to use pgAdmin to hold all of our data.
+We decided to use pgAdmin to hold all of our data; we used sqlalchemyORM to update our database table with our dataframe from our project.
 
 #Observations
 
