@@ -27,6 +27,9 @@ We decided to use pgAdmin to hold all of our data; we used sqlalchemyORM to upda
 
 #Observations
 
+![](images/Cancel-rate-v-cases.png)
+![](images/delay-time-v-cases.png)
+
 Would be interesting to make note of destination and departure airports to see if some states are affected more than others. The view of COVID has become heavily politicized, and we thought it would be interesting, for future, to see if there’s any major difference in delay data by red or blue state. 
 
 We saw that there were a lot more cancellations than there were delays. This is kind of an interesting observation as it seems to suggest that these airlines all have a process in place for loading their planes in a timely manner, even while COVID is surging.
